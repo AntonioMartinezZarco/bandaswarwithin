@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>World of Warcraft - Bandas y Jefes</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <div id="app">
+      <!-- El contenido se cargará dinámicamente con JavaScript -->
+    </div>
+  </div>
+
+  <script>
+    // Datos simulados de bandas, jefes, habilidades y loot
+    const bandas = [
+      {
+        nombre: "Núcleo de Magma",
+        jefes: [
+          {
+            nombre: "Ragnaros",
+            habilidades: [
+              { nombre: "Golpe aplastante", descripcion: "Inflige un 200% de daño cuerpo a cuerpo." },
+              { nombre: "Aliento de fuego", descripcion: "Hace que los enemigos cercanos sufran daño de fuego." }
+            ],
+            loot: [
+              { nombre: "Espada de Fuego", tipo: "Arma", rareza: "Épico" },
+              { nombre: "Escudo del Guardián", tipo: "Escudo", rareza: "Raro" }
+            ]
+          }
+        ]
+      },
+      {
+        nombre: "Guarida de Onyxia",
+        jefes: []
+      }
+    ];
+
+    let bandaSeleccionada = null;
+    let jefeSeleccionado = null;
+
+    // Función para mostrar la lista de bandas
+    function mostrarBandas() {
+      const appDiv = document.getElementById('app');
+      appDiv.innerHTML = `
+        <h1>Bandas de World of Warcraft</h1>
+        <ul>
+          ${bandas.map((banda, index) => `<li onclick="seleccionarBanda(${index})">${banda.nombre}</li>`).join('')}
+        </ul>
+      `;
+    }
+
+    // Función para seleccionar una banda y mostrar sus jefes
+    function seleccionarBanda(index) {
+      bandaSeleccionada = bandas[index];
+      const appDiv = document.getElementById('app');
+      appDiv.innerHTML = `
+        <button onclick="volverBandas()">Volver a las bandas</button>
+        <h1>Jefes de ${bandaSeleccionada.nombre}</h1>
+        <ul>
+          ${bandaSeleccionada.jefes.length > 0
+            ? bandaSeleccionada.jefes.map((jefe, jefeIndex) => `<li onclick="seleccionarJefe(${jefeIndex})">${jefe.nombre}</li>`).join('')
+            : '<p>No hay jefes disponibles para esta banda.</p>'}
+        </ul>
+      `;
+    }
+
+    // Función para seleccionar un jefe y mostrar sus detalles
+    function seleccionarJefe(index) {
+      jefeSeleccionado = bandaSeleccionada.jefes[index];
+      const appDiv = document.getElementById('app');
+      appDiv.innerHTML = `
+        <button onclick="volverJefes()">Volver a los jefes</button>
+        <h1>${jefeSeleccionado.nombre}</h1>
+        <h2>Habilidades</h2>
+        <ul>
+          ${jefeSeleccionado.habilidades.map(habilidad => `<li><strong>${habilidad.nombre}:</strong> ${habilidad.descripcion}</li>`).join('')}
+        </ul>
+        <h2>Loot</h2>
+        <ul>
+          ${jefeSeleccionado.loot.map(item => `<li><strong>${item.nombre}</strong> - ${item.tipo}, ${item.rareza}</li>`).join('')}
+        </ul>
+      `;
+    }
+
+    // Funciones para volver a las vistas anteriores
+    function volverBandas() {
+      bandaSeleccionada = null;
+      mostrarBandas();
+    }
+
+    function volverJefes() {
+      jefeSeleccionado = null;
+      seleccionarBanda(bandas.indexOf(bandaSeleccionada));
+    }
+
+    // Mostrar las bandas al cargar la página
+    mostrarBandas();
+  </script>
+</body>
+</html>
